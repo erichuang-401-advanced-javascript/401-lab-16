@@ -1,27 +1,15 @@
 'use strict';
 
-const express = require('express');
-const app = express();
-const fs = require('fs');
+const events = require('./lib/events');
+const readFile = require('./lib/read');
+const switcharoo = require('./lib/switcharoo');
+const writeFile = require('./lib/write');
+require('./lib/logger');
 
-const alterFile = (file) => {
-  fs.readFile( file, (err, data) => {
-    if(err) { throw err; }
-    let text = data.toString().toUpperCase();
-    fs.writeFile( file, Buffer.from(text), (err, data) => {
-      if(err) { throw err; }
-      console.log(`${file} saved`);
-    });
-  });
-};
+// event handlers here - on event, handler: read, switcharoo, write
+events.on('read', readFile);
+events.on('switcharoo', switcharoo);
+events.on('write', writeFile);
 
 let file = process.argv.slice(2).shift();
-alterFile(file);
-
-module.exports = {
-  start : ( port ) => {
-    app.listen( port, () => {
-      console.log('BATTLECRUISER OPERATIONAL o7');
-    })
-  }
-};
+events.emit( 'read', file );

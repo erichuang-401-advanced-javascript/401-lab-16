@@ -9,6 +9,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "fs-extra": "^8.1.0",
     "jest": "^24.8.0"
   }
 }
